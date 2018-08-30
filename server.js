@@ -3,7 +3,7 @@ const cols = 22;
 
 // ---- DB SETUP ----+
 r = require('rethinkdb');
-const dBName = 'checkbox_db';
+const dBName = 'test';
 const tableName = 'checkboxes';
 // create connection to db
 var connection = null;
@@ -11,18 +11,21 @@ r.connect({host: 'localhost', port: 28015}, function (err, conn) {
     if (err) throw err;
     connection = conn;
 
-    resetBoxes();
 
-    r.db('test').tableList().run(connection, function (err, result) {
+    r.db(dBName).tableList().run(connection, function (err, result) {
         if (err) throw err;
         // create table in db
         if (result.indexOf(tableName) == -1) {
-            console.log('create table' + tableName);
-            r.db('test').tableCreate(tableName).run(connection, function (err, res) {
+            console.log('create table: ' + tableName);
+            r.db(dBName).tableCreate(tableName).run(connection, function (err, res) {
                 if (err) throw err;
-                console.log(res);
+                // console.log(res);
                 resetBoxes();
             });
+        } else {
+            // if table exist
+            console.log('reset table');
+            resetBoxes();
         }
     })
 });
@@ -34,15 +37,15 @@ function resetBoxes() {
     for (var i = 0; i < (cols * rows); i++) {
         boxes.push({x: true, y: i})
     }
-    console.log(boxes);
+    // console.log(boxes);
     // remove all boxes from table
     r.table(tableName).delete().run(connection, function (err, result) {
         if (err) throw err;
-        console.log(JSON.stringify(result, null, 2));
+        // console.log(JSON.stringify(result, null, 2));
         // save boxes in table
         r.table(tableName).insert(boxes).run(connection, function (err, result) {
             if (err) throw err;
-            console.log(JSON.stringify(result, null, 2));
+            // console.log(JSON.stringify(result, null, 2));
         })
     })
 
@@ -82,7 +85,7 @@ function newConnection(socket) {
 
     function mouseMsg(data) {
         // 3) ---- Update the checkbox status in db and broadcast to other clients ----+
-        r.db('test').table('checkboxes').filter({y: data.y}).update({x: data.x}).run(connection, function (err, result) {
+        r.db(dBName).table('checkboxes').filter({y: data.y}).update({x: data.x}).run(connection, function (err, result) {
             if (err) throw err;
             // console.log(JSON.stringify(result, null, 2))
         });
