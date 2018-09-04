@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: rethinkdb
+    image: rethinkdb
+    restart: always
+
+  server:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "3000:3000"
+    restart: always
