@@ -4,8 +4,8 @@ var i;
 $(document).ready(function(){
 
   // create the checkbox elements
-  for (i = 0; i < 484; i++) {
-    $('#main').append('<input class="checkbox checkbox'+i+'" type="checkbox"></input>')
+  for (i = 0; i < 2480; i++) {
+    $('#main').append('<div><input class="checkbox checkbox'+i+'" type="checkbox"></input></div>')
   }
 
   socket = io.connect('http://localhost:3000');
