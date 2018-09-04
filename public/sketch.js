@@ -34,7 +34,7 @@ $(document).ready(function(){
 
   function check(data){
     // on receiving check or uncheck the checkbox
-    $('.checkbox'+data.y+'').prop('checked', data.x);;
+    $('.checkbox'+data.y+'').prop('checked', data.x);
   }
 
 });
