@@ -1,6 +1,5 @@
 // ---- Settings ----+
-const rows = 22;
-const cols = 22;
+const box_count = 2480;
 const reset = true;  // If true -> boxes get reset on server start.
 
 // ---- DB SETUP ----+
@@ -38,7 +37,7 @@ r.connect({host: 'rethinkdb', port: 28015}, function (err, conn) {
 function resetBoxes() {
     // ---- Reset all boxes in db ----+
     let boxes = [];
-    for (let i = 0; i < (cols * rows); i++) {
+    for (let i = 0; i < (box_count); i++) {
         boxes.push({x: true, y: i})
     }
     // remove all boxes from table
@@ -86,10 +85,6 @@ function onNewConnection(socket) {
         // ---- 3) Update the checkbox status in db ----+
         r.db(dBName).table('checkboxes').filter({y: data.y}).update({x: data.x}).run(connection, function (err, result) {
             if (err) throw err;
-
-            // 4) ---- Broadcast update to other clients ----+
-            console.log(data);
-            socket.broadcast.emit('mouse', data);
         });
     }
 }
