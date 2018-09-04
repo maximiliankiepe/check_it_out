@@ -9,6 +9,7 @@ $(document).ready(function(){
   }
 
   socket = io.connect('http://v9373939.campusvps.de:3000');
+  // socket = io.connect('localhost:3000');
 
   // 4) on receiving data on mouse make new Drawing
   socket.on('mouse', check);

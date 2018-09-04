@@ -1,0 +1,6 @@
+version: '3.3'
+
+services:
+  server:
+    environment:
+      MY_HOST: http://v9373939.campusvps.de:3000

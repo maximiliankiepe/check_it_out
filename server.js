@@ -55,10 +55,11 @@ let express = require('express');
 let app = express();
 let server = app.listen(3000);
 app.use(express.static('public'));
-
 console.log('My socket server is running');
+console.log(process.env.MY_HOST);
 let socket = require('socket.io');
 let io = socket(server);
+io.origins(process.env.MY_HOST);
 io.sockets.on('connection', onNewConnection);
 
 function onNewConnection(socket) {
@@ -85,6 +86,10 @@ function onNewConnection(socket) {
         // ---- 3) Update the checkbox status in db ----+
         r.db(dBName).table('checkboxes').filter({y: data.y}).update({x: data.x}).run(connection, function (err, result) {
             if (err) throw err;
+
+            // 4) ---- Broadcast update to other clients ----+
+            console.log(data);
+            socket.broadcast.emit('mouse', data);
         });
     }
 }

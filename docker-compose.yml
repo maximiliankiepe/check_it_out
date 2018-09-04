@@ -13,3 +13,5 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    environment:
+      MY_HOST: localhost:3000
