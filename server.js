@@ -59,7 +59,8 @@ console.log('My socket server is running');
 console.log(process.env.MY_HOST);
 let socket = require('socket.io');
 let io = socket(server);
-io.origins(process.env.MY_HOST);
+// io.origins(process.env.MY_HOST);
+io.origins('*:*');
 io.sockets.on('connection', onNewConnection);
 
 function onNewConnection(socket) {
